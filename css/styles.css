@@ -1,0 +1,29 @@
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    position: relative;
+    display: inline-block;
+}
+
+.hud {
+    position: absolute;
+    display: flex;
+    width: 100%;  /* Total width of the canvas */
+    align-items: center;
+    padding: 20px;
+}
+
+.healthbar {
+    background-color: yellow;
+    height: 30px;
+    width: 100%;
+}
+
+.timer {
+    background-color: red;
+    height: 100px;
+    width: 100px;
+    flex-shrink: 0;
+}
