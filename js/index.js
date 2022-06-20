@@ -6,34 +6,54 @@ canvas.width = 1024;
 canvas.height = 576;
 
 
-const gravity = 0.2;
+const gravity = 0.9;
 
 class Sprite {
-    constructor({ position, velocity, color }) {
+    constructor({ position, velocity, color, offset }) {
         this.position = position;
         this.height = 150;
         this.width = 50;
         this.velocity = velocity;
         this.color = color;
-        this.moveFactor = 3;    // Determinates how fast this sprite can move due to user input.
+        this.moveFactor = 6;    // Determinates how fast this sprite can move due to user input.
         this.lastKey;   // Last key pressed by this sprite.
         this.inTheAir = false;  // Avoid the sprite jump if it's already in the air.
+        this.isAttacking = false;
         this.attackBox = {
-            position: this.position,
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offSet: offset, // AttackBox's offset.
             width: 100,
             height: 50
         }
     }
 
-    // Draw the sprite in the canvas.
+    // Draw the sprites in the canvas.
     draw() {
         c.fillStyle = this.color;   // Fill the sprite with his color.
         c.fillRect(this.position.x, this.position.y, this.width, this.height);  // Actually put the sprite in the canvas.
+
+        if (this.isAttacking) {
+        // Attack box.
+        c.fillStyle = 'green'
+        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+        }
+    }
+
+    attack() {
+        this.isAttacking = true;
+        setTimeout(() => {
+            this.isAttacking = false;
+        }, 100)
     }
 
     // Update the sprite every frame.
     update() {
         this.draw();
+        this.attackBox.position.x = this.position.x + this.attackBox.offSet.x;    // Update attack box position to follow the sprite.
+        this.attackBox.position.y = this.position.y;    // Update attack box position to follow the sprite.
         this.position.y += this.velocity.y;     // Move the sprite in 'y' direction his 'y' velocity.
         this.position.x += this.velocity.x;    // Move the sprite in 'x' direction his 'x' velocity.
 
@@ -58,6 +78,10 @@ const player = new Sprite({
         x: 0,
         y: 0
     },
+    offset: {
+        x: 0,
+        y: 0
+    },
     color: 'blue'
 });
 
@@ -69,6 +93,10 @@ const enemy = new Sprite({
     },
     velocity: {
         x: 0,
+        y: 0
+    },
+    offset: {
+        x: -50,
         y: 0
     },
     color: 'red'
@@ -97,6 +125,14 @@ const keys = {
     }
 }
 
+// Detect whenever the attackBox of a sprite hits another sprite while attacking.
+function isHitting({ rectangle1, rectangle2 }) {
+    return (rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x &&
+        rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width &&
+        rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y &&
+        rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
+}
+
 // Animate the sprites every frame.
 function animate() {
     window.requestAnimationFrame(animate);  // Set this as a recursive function.
@@ -121,6 +157,18 @@ function animate() {
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight' && enemy.position.x <= (canvas.width - enemy.width)) {
         enemy.velocity.x = enemy.moveFactor;  // 'ArrowRight' is pressed and it's the last pressed key, then move to the right.
     }
+
+    // Player is attacking.
+    if (isHitting({ rectangle1: player, rectangle2: enemy }) && player.isAttacking) {
+        player.isAttacking = false;
+        console.log('hit player')
+    }
+
+    // Enemy is attacking.
+    if (isHitting({ rectangle1: enemy, rectangle2: player }) && enemy.isAttacking) {
+        enemy.isAttacking = false;
+        console.log('hit enemy')
+    }
 }
 
 animate();
@@ -138,10 +186,14 @@ window.addEventListener('keydown', (event) => {
             player.lastKey = 'a';
             break;
         case 'w':
-            if (!player.inTheAir) {  // Only can jump if it's not in the air.
-                player.velocity.y = -10;
+            if (!player.inTheAir) {  // Can only jump if it's not in the air.
+                player.velocity.y = -player.moveFactor * 4;
             }
             break;
+        case ' ':   // Player attack with space bar.
+            player.attack();
+            break;
+
 
         // Enemy keys.
         case 'ArrowRight':
@@ -154,8 +206,11 @@ window.addEventListener('keydown', (event) => {
             break;
         case 'ArrowUp':
             if (!enemy.inTheAir) {   // Only can jump if it's not in the air.
-                enemy.velocity.y = -10;
+                enemy.velocity.y = -enemy.moveFactor * 4;
             }
+            break;
+        case 'Control': // Enemy attack with Right control key.
+            enemy.attack();
             break;
     }
 });
