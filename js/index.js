@@ -134,6 +134,19 @@ function isHitting({ rectangle1, rectangle2 }) {
         rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
 }
 
+let timer = parseInt(document.querySelector('#timer').innerHTML, 10);
+function decreaseTimer(){
+    if (timer > 0){
+        setTimeout(decreaseTimer, 1000);
+        timer--;
+        document.querySelector('#timer').innerHTML = timer;
+    } else {
+        console.log("finish")
+    }
+}
+
+decreaseTimer();
+
 // Animate the sprites every frame.
 function animate() {
     window.requestAnimationFrame(animate);  // Set this as a recursive function.
