@@ -18,15 +18,20 @@
         <div class="hud">
 
             <!-- Player's health -->
-            <div class="healthbar"></div>
-
+            <div class="healthLayout">
+                <div class="remainingHealthbar"></div> <!-- TODO: Arreglar nombre barras. -->
+                <div id="playerHealth" class="totalHealthBar"></div>
+            </div>
             <!-- Timer -->
             <div class="timer"></div>
 
             <!-- Enemy's health -->
-            <div class="healthbar"></div>
+            <div class="healthLayout">
+                <div class="remainingHealthbar"></div> <!-- TODO: Arreglar nombre barras. -->
+                <div id="enemyHealth" class="totalHealthBar"></div>
+            </div>
         </div>
-        <canvas> </canvas>
+        <canvas id="gameWindow"> </canvas>
 
     </div>
 

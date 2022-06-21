@@ -10,15 +10,31 @@
 .hud {
     position: absolute;
     display: flex;
-    width: 100%;  /* Total width of the canvas */
+    width: 100%;
+    /* Total width of the canvas */
     align-items: center;
     padding: 20px;
 }
 
-.healthbar {
+.healthLayout {
+    position: relative;
+    height: 30px;
+    width: 100%;
+}
+
+.remainingHealthbar {
     background-color: yellow;
     height: 30px;
     width: 100%;
+}
+
+.totalHealthBar{
+    position: absolute;
+    background-color: green;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 .timer {

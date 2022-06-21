@@ -19,6 +19,7 @@ class Sprite {
         this.lastKey;   // Last key pressed by this sprite.
         this.inTheAir = false;  // Avoid the sprite jump if it's already in the air.
         this.isAttacking = false;
+        this.health = 100;
         this.attackBox = {
             position: {
                 x: this.position.x,
@@ -158,16 +159,18 @@ function animate() {
         enemy.velocity.x = enemy.moveFactor;  // 'ArrowRight' is pressed and it's the last pressed key, then move to the right.
     }
 
-    // Player is attacking.
+    // Player is attacking and tries to hit his enemy.
     if (isHitting({ rectangle1: player, rectangle2: enemy }) && player.isAttacking) {
         player.isAttacking = false;
-        console.log('hit player')
+        enemy.health -= 20;
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
     }
 
-    // Enemy is attacking.
+    // Enemy is attacking and tries to hit the player.
     if (isHitting({ rectangle1: enemy, rectangle2: player }) && enemy.isAttacking) {
         enemy.isAttacking = false;
-        console.log('hit enemy')
+        player.health -= 20;
+        document.querySelector('#playerHealth').style.width = player.health + '%'
     }
 }
 
