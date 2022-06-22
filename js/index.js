@@ -1,107 +1,14 @@
+import { player, enemy } from './Sprite.js'
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
+let timer = parseInt(document.querySelector('#timer').innerHTML, 10);   // Get the string in the timer element and parse it to Int.
+let timerID;    // Used to clearTimeout.
+let gameEnded = false;  // Flag to determinate whenever game's has ended or not.
 
 // Canvas' dimension.
 canvas.width = 1024;
 canvas.height = 576;
 
-
-const gravity = 0.9;
-
-class Sprite {
-    constructor({ position, velocity, color, offset }) {
-        this.position = position;
-        this.height = 150;
-        this.width = 50;
-        this.velocity = velocity;
-        this.color = color;
-        this.moveFactor = 6;    // Determinates how fast this sprite can move due to user input.
-        this.lastKey;   // Last key pressed by this sprite.
-        this.inTheAir = false;  // Avoid the sprite jump if it's already in the air.
-        this.isAttacking = false;
-        this.health = 100;
-        this.attackBox = {
-            position: {
-                x: this.position.x,
-                y: this.position.y
-            },
-            offSet: offset, // AttackBox's offset.
-            width: 100,
-            height: 50
-        }
-    }
-
-    // Draw the sprites in the canvas.
-    draw() {
-        c.fillStyle = this.color;   // Fill the sprite with his color.
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);  // Actually put the sprite in the canvas.
-
-        if (this.isAttacking) {
-        // Attack box.
-        c.fillStyle = 'green'
-        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
-        }
-    }
-
-    attack() {
-        this.isAttacking = true;
-        setTimeout(() => {
-            this.isAttacking = false;
-        }, 100)
-    }
-
-    // Update the sprite every frame.
-    update() {
-        this.draw();
-        this.attackBox.position.x = this.position.x + this.attackBox.offSet.x;    // Update attack box position to follow the sprite.
-        this.attackBox.position.y = this.position.y;    // Update attack box position to follow the sprite.
-        this.position.y += this.velocity.y;     // Move the sprite in 'y' direction his 'y' velocity.
-        this.position.x += this.velocity.x;    // Move the sprite in 'x' direction his 'x' velocity.
-
-        // If the sprite is in the air, then it gets affected by gravity.
-        if (this.position.y + this.height + this.velocity.y >= canvas.height) { // Sprite reach the bottom of the canvas.
-            this.velocity.y = 0;
-            this.inTheAir = false;  // Sprite touch the bottom of the canvas, is not in the air and can jump again.
-        } else {    // Sprite is in the air, gets affected by gravity.
-            this.velocity.y += gravity;
-            this.inTheAir = true;   // Sprite is in the air and can't jump againg.
-        }
-    }
-}
-
-// Create player sprite.
-const player = new Sprite({
-    position: {
-        x: 0,
-        y: 0
-    },
-    velocity: {
-        x: 0,
-        y: 0
-    },
-    offset: {
-        x: 0,
-        y: 0
-    },
-    color: 'blue'
-});
-
-// Create enemy sprite.
-const enemy = new Sprite({
-    position: {
-        x: 400,
-        y: 100
-    },
-    velocity: {
-        x: 0,
-        y: 0
-    },
-    offset: {
-        x: -50,
-        y: 0
-    },
-    color: 'red'
-});
 
 const keys = {
     // Player.
@@ -134,18 +41,31 @@ function isHitting({ rectangle1, rectangle2 }) {
         rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
 }
 
-let timer = parseInt(document.querySelector('#timer').innerHTML, 10);
-function decreaseTimer(){
-    if (timer > 0){
-        setTimeout(decreaseTimer, 1000);
+// Decrease the timer. If it reaches 0 announce the winner based on remaining health.
+function decreaseTimer() {
+    if (timer > 0) {
+        timerID = setTimeout(decreaseTimer, 1000);  // Call this function againg in 1 second.
         timer--;
-        document.querySelector('#timer').innerHTML = timer;
-    } else {
-        console.log("finish")
+        document.querySelector('#timer').innerHTML = timer; // Write the html with the new timer.
+    } else {    // Timer runs out, announce the winner.
+        determineWinner({ player, enemy, timerID });
     }
 }
 
 decreaseTimer();
+
+function determineWinner({ player, enemy, timerID }) {
+    clearTimeout(timerID);  // Stop the timer, the game ended.
+    gameEnded = true;
+    document.querySelector('#result').style.display = 'flex'    // Change from 'none' to 'flex'
+    if (player.health === enemy.health) {
+        document.querySelector('#result').innerHTML = 'Tie!';   // Player's and enemy's health are the same.
+    } else if (player.health > enemy.health) {
+        document.querySelector('#result').innerHTML = 'Player won!'; // Player's health is greater.
+    } else {
+        document.querySelector('#result').innerHTML = 'Enemy won!'; // Enemy's health is greater.
+    }
+}
 
 // Animate the sprites every frame.
 function animate() {
@@ -155,8 +75,8 @@ function animate() {
     player.update();
     enemy.update();
 
-    player.velocity.x = 0;
-    enemy.velocity.x = 0;
+    player.velocity.x = 0;  // Reset the "x" velocity of the player each frame. So it doesn't "slide" every frame.
+    enemy.velocity.x = 0;   // Same for the enemy.
 
     // This determinates if the player moves to the left or to the right. It wont let the player leave the canvas at the sides.
     if (keys.a.pressed && player.lastKey === 'a' && player.position.x >= 0) {
@@ -174,17 +94,24 @@ function animate() {
 
     // Player is attacking and tries to hit his enemy.
     if (isHitting({ rectangle1: player, rectangle2: enemy }) && player.isAttacking) {
-        player.isAttacking = false;
+        player.isAttacking = false; // Reset the attack.
         enemy.health -= 20;
-        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
+        document.querySelector('#enemyHealth').style.width = enemy.health + '%';
     }
 
     // Enemy is attacking and tries to hit the player.
     if (isHitting({ rectangle1: enemy, rectangle2: player }) && enemy.isAttacking) {
         enemy.isAttacking = false;
         player.health -= 20;
-        document.querySelector('#playerHealth').style.width = player.health + '%'
+        document.querySelector('#playerHealth').style.width = player.health + '%';
     }
+
+    if (!gameEnded) {
+        if (enemy.health <= 0 || player.health <= 0) {
+            determineWinner({ player, enemy, timerID });
+        }
+    }
+
 }
 
 animate();

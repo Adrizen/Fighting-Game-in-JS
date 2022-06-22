@@ -47,3 +47,14 @@
     justify-content: center;
 }
 
+.result {
+    position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: wheat;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
