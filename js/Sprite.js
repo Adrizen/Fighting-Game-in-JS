@@ -2,30 +2,29 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
 class Sprite {
-    constructor({ position, imageSrc, scale = 1, maxFrames = 1 }) {
+    constructor({ position, imageSrc, scale = 1, maxFrames = 1, holdFrames = 10, offsetFrame = { x: 0, y: 0 } }) {
         this.position = position;
         this.height = 150;
         this.width = 50;
         this.image = new Image();
         this.image.src = imageSrc;
         this.scale = scale;
-        this.maxFrames = maxFrames; // Maximum image's frames.
+        this.maxFrames = maxFrames;     // Maximum image's frames.
         this.currentFrame = 0;
-        this.elapsedFrames = 0; // How many frames have passed. Used for a smoother animation.
-        this.holdFrames = 10;   // How many frames to wait until update the image with another frame. Used for a smoother animation.
+        this.elapsedFrames = 0;         // How many frames have passed. Used for a smoother animation.
+        this.holdFrames = holdFrames;   // How many frames to wait until update the image with another frame. Used for a smoother animation.
+        this.offsetFrame = offsetFrame;
     }
 
     // Draw the sprites in the canvas.
     draw() {
         // Draw the image in the canvas with his crop properties
         c.drawImage(this.image, this.currentFrame * (this.image.width / this.maxFrames), 0, this.image.width / this.maxFrames,
-            this.image.height, this.position.x, this.position.y,
+            this.image.height, this.position.x - this.offsetFrame.x, this.position.y - this.offsetFrame.y,
             (this.image.width / this.maxFrames) * this.scale, this.image.height * this.scale);
     }
 
-    // Update the sprite every frame.
-    update() {
-        this.draw();
+    animateFrames() {
         this.elapsedFrames++;
         // Update the current frame only if we waited holdFrames.
         if (this.elapsedFrames % this.holdFrames === 0) {
@@ -35,6 +34,12 @@ class Sprite {
                 this.currentFrame = 0;  // Reset the current frame to the beginning of the animation.
             }
         }
+    }
+
+    // Update the sprite every frame.
+    update() {
+        this.draw();
+        this.animateFrames();
     }
 }
 

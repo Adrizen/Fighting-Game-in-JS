@@ -9,12 +9,11 @@ canvas.height = 576;
 const gravity = 0.9;
 
 class Fighter extends Sprite{
-    constructor({ position, velocity, color, offset }) {
-        super({position});
+    constructor({ position, offset, imageSrc, scale, maxFrames, holdFrames, offsetFrame = {x: 0, y: 0} }) {
+        super({position, imageSrc, scale, maxFrames, holdFrames, offsetFrame});
         this.height = 150;
         this.width = 50;
-        this.velocity = velocity;
-        this.color = color;
+        this.velocity = {x: 0, y:0} // Initial velocity is 0 in both axis.
         this.moveFactor = 6;    // Determinates how fast this sprite can move due to user input.
         this.lastKey;           // Last key pressed by this sprite.
         this.inTheAir = false;  // Avoid the sprite jump if it's already in the air.
@@ -31,33 +30,19 @@ class Fighter extends Sprite{
         }
     }
 
-    // Draw the sprites in the canvas.
-    draw() {
-        c.fillStyle = this.color;   // Fill the sprite with his color.
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);  // Actually put the sprite in the canvas.
-
-        if (this.isAttacking) {
-        // Attack box.
-        c.fillStyle = 'green'
-        c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
-        }
-    }
-
     attack() {
         this.isAttacking = true;
-        setTimeout(() => {
-            this.isAttacking = false;
-        }, 100)
+        setTimeout(() => { this.isAttacking = false }, 100)
     }
 
     // Update the sprite every frame.
     update() {
-        this.draw();
+        super.update();
         this.attackBox.position.x = this.position.x + this.attackBox.offSet.x;    // Update attack box position to follow the sprite.
         this.attackBox.position.y = this.position.y;    // Update attack box position to follow the sprite.
         this.position.y += this.velocity.y;     // Move the sprite in 'y' direction his 'y' velocity.
         this.position.x += this.velocity.x;    // Move the sprite in 'x' direction his 'x' velocity.
-
+        
         // If the sprite is in the air, then it gets affected by gravity.
         if (this.position.y + this.height + this.velocity.y >= canvas.height - 95) { // Sprite reach the bottom of the canvas.
             this.velocity.y = 0;
@@ -75,15 +60,15 @@ export const player = new Fighter({
         x: 0,
         y: 0
     },
-    velocity: {
-        x: 0,
-        y: 0
-    },
     offset: {
         x: 0,
         y: 0
     },
-    color: 'blue'
+    imageSrc: '/assets/img/samuraiMack/Idle.png',
+    scale: 2.5,
+    maxFrames: 8,
+    holdFrames: 7,
+    offsetFrame: {x: 215, y: 154}
 });
 
 // Create enemy sprite.
@@ -92,14 +77,14 @@ export const enemy = new Fighter({
         x: 400,
         y: 100
     },
-    velocity: {
-        x: 0,
-        y: 0
-    },
     offset: {
         x: -50,
         y: 0
     },
-    color: 'red'
+    imageSrc: '/assets/img/kenji/Idle.png',
+    scale: 2.5,
+    maxFrames: 4,
+    holdFrames: 10,
+    offsetFrame: {x: 215, y: 172}
 });
 
