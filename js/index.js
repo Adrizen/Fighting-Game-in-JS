@@ -1,7 +1,9 @@
-import { player, enemy } from './Sprite.js'
+import { player, enemy } from './Fighter.js'
+import { background } from './Sprite.js';
+
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
-let timer = parseInt(document.querySelector('#timer').innerHTML, 10);   // Get the string in the timer element and parse it to Int.
+let timer = 10; // Game timer.
 let timerID;    // Used to clearTimeout.
 let gameEnded = false;  // Flag to determinate whenever game's has ended or not.
 
@@ -72,8 +74,10 @@ function animate() {
     window.requestAnimationFrame(animate);  // Set this as a recursive function.
     c.fillStyle = 'black'   // Set the canvas background to black.
     c.fillRect(0, 0, canvas.width, canvas.height);  // Fill the canvas.
+    background.update();
     player.update();
     enemy.update();
+    
 
     player.velocity.x = 0;  // Reset the "x" velocity of the player each frame. So it doesn't "slide" every frame.
     enemy.velocity.x = 0;   // Same for the enemy.
