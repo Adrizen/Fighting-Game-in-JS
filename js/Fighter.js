@@ -3,7 +3,7 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
 // Canvas' dimension.
-canvas.width = 1024;
+canvas.width = 1024;    // TODO: Quizás mejorar esto para no repetir code.
 canvas.height = 576;
 
 const gravity = 0.9;
@@ -59,7 +59,7 @@ class Fighter extends Sprite{
         this.position.x += this.velocity.x;    // Move the sprite in 'x' direction his 'x' velocity.
 
         // If the sprite is in the air, then it gets affected by gravity.
-        if (this.position.y + this.height + this.velocity.y >= canvas.height) { // Sprite reach the bottom of the canvas.
+        if (this.position.y + this.height + this.velocity.y >= canvas.height - 95) { // Sprite reach the bottom of the canvas.
             this.velocity.y = 0;
             this.inTheAir = false;  // Sprite touch the bottom of the canvas, is not in the air and can jump again.
         } else {    // Sprite is in the air, gets affected by gravity.

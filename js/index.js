@@ -1,6 +1,6 @@
 import { player, enemy } from './Fighter.js'
-import { background } from './Sprite.js';
-import { loadKeyDownEvents, loadkeyUpEvents, playerMovement, enemyMovement } from './Keys.js'
+import { background, shop } from './Sprite.js';
+import { loadKeyDownEvents, loadkeyUpEvents, playerMovement, enemyMovement, isHitting } from './Keys.js'
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 let timer = 10; // Game timer.
@@ -15,15 +15,6 @@ canvas.height = 576;
 loadKeyDownEvents(player, enemy);   // Load player and enemy movements.
 loadkeyUpEvents();
 
-
-// Detect whenever the attackBox of a sprite hits another sprite while attacking.
-function isHitting({ rectangle1, rectangle2 }) {
-    return (rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x &&
-        rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width &&
-        rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y &&
-        rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
-}
-
 // Decrease the timer. If it reaches 0 announce the winner based on remaining health.
 function decreaseTimer() {
     if (timer > 0) {
@@ -37,25 +28,13 @@ function decreaseTimer() {
 
 decreaseTimer();
 
-function determineWinner({ player, enemy, timerID }) {
-    clearTimeout(timerID);  // Stop the timer, the game ended.
-    gameEnded = true;
-    document.querySelector('#result').style.display = 'flex'    // Change from 'none' to 'flex'
-    if (player.health === enemy.health) {
-        document.querySelector('#result').innerHTML = 'Tie!';   // Player's and enemy's health are the same.
-    } else if (player.health > enemy.health) {
-        document.querySelector('#result').innerHTML = 'Player won!'; // Player's health is greater.
-    } else {
-        document.querySelector('#result').innerHTML = 'Enemy won!'; // Enemy's health is greater.
-    }
-}
-
 // Animate the sprites every frame.
 function animate() {
     window.requestAnimationFrame(animate);  // Set this as a recursive function.
     c.fillStyle = 'black'   // Set the canvas background to black.
     c.fillRect(0, 0, canvas.width, canvas.height);  // Fill the canvas.
     background.update();
+    shop.update();
     player.update();
     enemy.update();
     
@@ -88,3 +67,15 @@ function animate() {
 
 animate();
 
+function determineWinner({ player, enemy, timerID }) {
+    clearTimeout(timerID);  // Stop the timer, the game ended.
+    gameEnded = true;
+    document.querySelector('#result').style.display = 'flex'    // Change from 'none' to 'flex'
+    if (player.health === enemy.health) {
+        document.querySelector('#result').innerHTML = 'Tie!';   // Player's and enemy's health are the same.
+    } else if (player.health > enemy.health) {
+        document.querySelector('#result').innerHTML = 'Player won!'; // Player's health is greater.
+    } else {
+        document.querySelector('#result').innerHTML = 'Enemy won!'; // Enemy's health is greater.
+    }
+}
