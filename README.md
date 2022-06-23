@@ -1,7 +1,14 @@
 # A simple two-player fighting game made in JS using HTML Canvas.
 
-Based in this tutorial: https://www.youtube.com/watch?v=vyqbNFMDRGQ
+Current state: 🟧 (heavy development needed)
 
-Play at: TBA
+🎥 Based in this tutorial: https://www.youtube.com/watch?v=vyqbNFMDRGQ
 
-Screenshots: Soon™
+📁 Assets:
+* [Samurai](https://luizmelo.itch.io/martial-hero) (Credits: LuizMelo)
+* [Kenji](https://luizmelo.itch.io/martial-hero-2) (Credits: LuizMelo)
+* [Background Oak Woods](https://brullov.itch.io/oak-woods) (Credits: brullov)
+
+▶️ Play at: TBA
+
+📸 Screenshots: Soon™
