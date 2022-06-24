@@ -2,7 +2,7 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
 class Sprite {
-    constructor({ position, imageSrc, scale = 1, maxFrames = 1, holdFrames = 10, offsetFrame = { x: 0, y: 0 } }) {
+    constructor({ position, imageSrc, scale = 1, maxFrames = 1, holdFrames = 30, offsetFrame = { x: 0, y: 0 } }) {
         this.position = position;
         this.height = 150;
         this.width = 50;

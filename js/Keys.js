@@ -58,7 +58,7 @@ export function loadKeyDownEvents(player, enemy) {
                     enemy.velocity.y = -enemy.moveFactor * 4;
                 }
                 break;
-            case 'Control': // Enemy attack with Right control key.
+            case 'Control': // Enemy attack with control key.
                 enemy.attack();
                 break;
         }
@@ -89,20 +89,32 @@ export function loadkeyUpEvents() {
 
 export function playerMovement(player, canvas) {
     // This determinates if the player moves to the left or to the right. It wont let the player leave the canvas at the sides.
+    let running = false;    // Determinate if player is running or not.
     if (keys.a.pressed && player.lastKey === 'a' && player.position.x >= 0) {
         player.velocity.x = -player.moveFactor; // 'a' is pressed and it's the last pressed key, then move to the left.
+        player.switchSprite('run')
+        running = true;
     } else if (keys.d.pressed && player.lastKey === 'd' && player.position.x <= (canvas.width - player.width)) {
         player.velocity.x = player.moveFactor;  // 'd' is pressed and it's the last pressed key, then move to the right.
+        player.switchSprite('run')
+        running = true;
     }
+    return running;
 }
 // TODO: Refactor this two methods to only one.
 export function enemyMovement(enemy, canvas) {
     // This determinates if the enemy moves to the left or to the right. It wont let the enemy leave the canvas at the sides.
+    let running = false;    // Determinate if enemy is running or not.
     if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft' && enemy.position.x >= 0) {
         enemy.velocity.x = -enemy.moveFactor; // 'ArrowLeft' is pressed and it's the last pressed key, then move to the left.
+        running = true;
+        enemy.switchSprite('run')
     } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight' && enemy.position.x <= (canvas.width - enemy.width)) {
         enemy.velocity.x = enemy.moveFactor;  // 'ArrowRight' is pressed and it's the last pressed key, then move to the right.
+        enemy.switchSprite('run')
+        running = true;
     }
+    return running;
 }
 
 // Detect whenever the attackBox of a sprite hits another sprite while attacking.

@@ -40,8 +40,14 @@ function animate() {
     
     player.velocity.x = 0;  // Reset the "x" velocity of the player each frame. So it doesn't "slide" every frame.
     enemy.velocity.x = 0;   // Same for the enemy.
-    playerMovement(player, canvas); // Player movement in the canvas.
-    enemyMovement(enemy, canvas);   // Enemy movement in the canvas.
+
+    if (!playerMovement(player, canvas)) {  // If player is not running, set his spriteto idle.
+        player.switchSprite('idle');
+    }
+
+    if (!enemyMovement(enemy, canvas)) {    // Enemy movement in the canvas.
+        enemy.switchSprite('idle')
+    }  
 
     // Player is attacking and tries to hit his enemy.
     if (isHitting({ rectangle1: player, rectangle2: enemy }) && player.isAttacking) {
