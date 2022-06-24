@@ -2,13 +2,12 @@ import Sprite from './Sprite.js'
 const canvas = document.querySelector('canvas');
 
 // Canvas' dimension.
-canvas.width = 1024;    // TODO: Quizás mejorar esto para no repetir code.
+canvas.width = 1024;    // TODO: Hacer más grande el canvas?
 canvas.height = 576;
-
 const gravity = 1;
 
 class Fighter extends Sprite {
-    constructor({ position, offset, imageSrc, scale, maxFrames, holdFrames, offsetFrame = { x: 0, y: 0 }, sprites }) {
+    constructor({ position, offset, imageSrc, scale, maxFrames, holdFrames, offsetFrame = { x: 0, y: 0 }, sprites, keys }) {
         super({ position, imageSrc, scale, maxFrames, holdFrames, offsetFrame });
         this.height = 150;
         this.width = 50;
@@ -26,18 +25,33 @@ class Fighter extends Sprite {
             offSet: offset, // AttackBox's offset.
             width: 100,
             height: 50
-        }
+        };  // End attack box.
         this.sprites = sprites;
-
         for (const sprite in this.sprites) {
             sprites[sprite].image = new Image();
             sprites[sprite].image.src = sprites[sprite].imageSrc;
         }
+        this.keys = keys;
     }
 
     attack() {
         this.isAttacking = true;
         setTimeout(() => { this.isAttacking = false }, 100)
+    }
+
+    movement() {
+        // This determinates if the player moves to the left or to the right. It wont let the player leave the canvas at the sides.
+        let running = false;    // Determinate if player is running or not.
+        if (Object.values(this.keys)[0].pressed && (this.lastKey === 'a' || this.lastKey === 'ArrowLeft') && this.position.x >= 0) {
+            this.velocity.x = -this.moveFactor; // 'a' is pressed and it's the last pressed key, then move to the left.
+            this.switchSprite('run')
+            running = true;
+        } else if (Object.values(this.keys)[1].pressed && (this.lastKey === 'd' || this.lastKey === 'ArrowRight') && this.position.x <= (canvas.width - this.width)) {
+            this.velocity.x = this.moveFactor;  // 'd' is pressed and it's the last pressed key, then move to the right.
+            this.switchSprite('run')
+            running = true;
+        }
+        return running;
     }
 
     // Update the sprite every frame.
@@ -77,15 +91,13 @@ class Fighter extends Sprite {
                 console.log("correr")
                 this.image = this.sprites.run.image;
                 this.maxFrames = this.sprites.run.maxFrames;
-                //this.currentFrame = 0;
-                
+
                 break;
             case 'jump':
                 console.log("saltar")
                 this.image = this.sprites.jump.image;
                 this.maxFrames = this.sprites.jump.maxFrames;
-                //this.elapsedFrames = this.maxFrames;
-                this.currentFrame = 0; 
+                this.currentFrame = 0;
                 break;
             case 'fall':
                 console.log("caer")
@@ -142,8 +154,23 @@ export const player = new Fighter({
             maxFrames: 4,
         }
 
+    },
+    keys: {
+        'a': {
+            pressed: false
+        },
+        'd': {
+            pressed: false
+        },
+        'w': {
+            pressed: false
+        },
+        ' ': {
+            pressed: false
+        }
+
     }
-});
+})
 
 // Create enemy sprite.
 export const enemy = new Fighter({
@@ -158,7 +185,7 @@ export const enemy = new Fighter({
     imageSrc: '/assets/img/kenji/Idle.png',
     scale: 2.5,
     maxFrames: 4,
-    holdFrames: 5,
+    holdFrames: 6,
     offsetFrame: { x: 215, y: 172 },
     sprites: {   // Sprites for different animations.
         idle: {
@@ -189,7 +216,20 @@ export const enemy = new Fighter({
             imageSrc: '/assets/img/kenji/Take hit.png',
             maxFrames: 3,
         }
-
+    },
+    keys: {
+        'ArrowLeft': {
+            pressed: false
+        },
+        'ArrowRight': {
+            pressed: false
+        },
+        'ArrowUp': {
+            pressed: false
+        },
+        'Control': {
+            pressed: false
+        }
     }
 });
 

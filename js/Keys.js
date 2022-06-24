@@ -1,4 +1,4 @@
-const keys = {
+export const keys = {
     // Player.
     a: {
         pressed: false
@@ -27,11 +27,11 @@ export function loadKeyDownEvents(player, enemy) {
         switch (event.key) {
             // Player keys.
             case 'd':
-                keys.d.pressed = true;
+                player.keys.d.pressed = true;
                 player.lastKey = 'd';
                 break;
             case 'a':
-                keys.a.pressed = true;
+                player.keys.a.pressed = true;
                 player.lastKey = 'a';
                 break;
             case 'w':
@@ -46,11 +46,11 @@ export function loadKeyDownEvents(player, enemy) {
 
             // Enemy keys.
             case 'ArrowRight':
-                keys.ArrowRight.pressed = true;
+                enemy.keys.ArrowRight.pressed = true;
                 enemy.lastKey = 'ArrowRight';
                 break;
             case 'ArrowLeft':
-                keys.ArrowLeft.pressed = true;
+                enemy.keys.ArrowLeft.pressed = true;
                 enemy.lastKey = 'ArrowLeft';
                 break;
             case 'ArrowUp':
@@ -65,57 +65,29 @@ export function loadKeyDownEvents(player, enemy) {
     });
 }
 
-export function loadkeyUpEvents() {
+export function loadkeyUpEvents(player, enemy) {
     // Whenever a key is lifted.
     window.addEventListener('keyup', (event) => {
         switch (event.key) {
             // Player.
             case 'd':
-                keys.d.pressed = false;
+                player.keys.d.pressed = false;
                 break;
             case 'a':
-                keys.a.pressed = false;
+                player.keys.a.pressed = false;
                 break;
             // Enemy
             case 'ArrowRight':
-                keys.ArrowRight.pressed = false;
+                enemy.keys.ArrowRight.pressed = false;
                 break;
             case 'ArrowLeft':
-                keys.ArrowLeft.pressed = false;
+                enemy.keys.ArrowLeft.pressed = false;
                 break;
         }
     });
 }
 
-export function playerMovement(player, canvas) {
-    // This determinates if the player moves to the left or to the right. It wont let the player leave the canvas at the sides.
-    let running = false;    // Determinate if player is running or not.
-    if (keys.a.pressed && player.lastKey === 'a' && player.position.x >= 0) {
-        player.velocity.x = -player.moveFactor; // 'a' is pressed and it's the last pressed key, then move to the left.
-        player.switchSprite('run')
-        running = true;
-    } else if (keys.d.pressed && player.lastKey === 'd' && player.position.x <= (canvas.width - player.width)) {
-        player.velocity.x = player.moveFactor;  // 'd' is pressed and it's the last pressed key, then move to the right.
-        player.switchSprite('run')
-        running = true;
-    }
-    return running;
-}
-// TODO: Refactor this two methods to only one.
-export function enemyMovement(enemy, canvas) {
-    // This determinates if the enemy moves to the left or to the right. It wont let the enemy leave the canvas at the sides.
-    let running = false;    // Determinate if enemy is running or not.
-    if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft' && enemy.position.x >= 0) {
-        enemy.velocity.x = -enemy.moveFactor; // 'ArrowLeft' is pressed and it's the last pressed key, then move to the left.
-        running = true;
-        enemy.switchSprite('run')
-    } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight' && enemy.position.x <= (canvas.width - enemy.width)) {
-        enemy.velocity.x = enemy.moveFactor;  // 'ArrowRight' is pressed and it's the last pressed key, then move to the right.
-        enemy.switchSprite('run')
-        running = true;
-    }
-    return running;
-}
+
 
 // Detect whenever the attackBox of a sprite hits another sprite while attacking.
 export function isHitting({ rectangle1, rectangle2 }) {
