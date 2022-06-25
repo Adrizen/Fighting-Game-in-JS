@@ -1,6 +1,6 @@
 # A simple two-player fighting game made in JS using HTML Canvas.
 
-Current state: 🟧 (heavy development needed)
+Current state: 🟨 (playable)
 
 🎥 Based in this tutorial: https://www.youtube.com/watch?v=vyqbNFMDRGQ
 
