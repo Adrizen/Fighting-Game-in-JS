@@ -42,14 +42,16 @@ class Fighter extends Sprite {
     movement() {
         // This determinates if the player moves to the left or to the right. It wont let the player leave the canvas at the sides.
         let running = false;    // Determinate if player is running or not.
-        if (Object.values(this.keys)[0].pressed && (this.lastKey === 'a' || this.lastKey === 'ArrowLeft') && this.position.x >= 0) {
-            this.velocity.x = -this.moveFactor; // 'a' is pressed and it's the last pressed key, then move to the left.
-            this.switchSprite('run')
-            running = true;
-        } else if (Object.values(this.keys)[1].pressed && (this.lastKey === 'd' || this.lastKey === 'ArrowRight') && this.position.x <= (canvas.width - this.width)) {
-            this.velocity.x = this.moveFactor;  // 'd' is pressed and it's the last pressed key, then move to the right.
-            this.switchSprite('run')
-            running = true;
+        if (this.health > 0) {
+            if (Object.values(this.keys)[0].pressed && (this.lastKey === 'a' || this.lastKey === 'ArrowLeft') && this.position.x >= 0) {
+                this.velocity.x = -this.moveFactor; // 'a' is pressed and it's the last pressed key, then move to the left.
+                this.switchSprite('run')
+                running = true;
+            } else if (Object.values(this.keys)[1].pressed && (this.lastKey === 'd' || this.lastKey === 'ArrowRight') && this.position.x <= (canvas.width - this.width)) {
+                this.velocity.x = this.moveFactor;  // 'd' is pressed and it's the last pressed key, then move to the right.
+                this.switchSprite('run')
+                running = true;
+            }
         }
         return running;
     }
@@ -80,7 +82,7 @@ class Fighter extends Sprite {
     switchSprite(sprite) {
         switch (sprite) {
             case 'idle':
-                if (this.image !== this.sprites.idle.image && !this.inTheAir) {
+                if (this.image !== this.sprites.idle.image && !this.inTheAir && this.health > 0) {
                     console.log("idle")
                     this.image = this.sprites.idle.image;
                     this.maxFrames = this.sprites.idle.maxFrames;
@@ -91,7 +93,6 @@ class Fighter extends Sprite {
                 console.log("correr")
                 this.image = this.sprites.run.image;
                 this.maxFrames = this.sprites.run.maxFrames;
-
                 break;
             case 'jump':
                 console.log("saltar")
@@ -103,6 +104,12 @@ class Fighter extends Sprite {
                 console.log("caer")
                 this.image = this.sprites.fall.image;
                 this.maxFrames = this.sprites.fall.maxFrames;
+                this.currentFrame = 0;
+                break;
+            case 'death':
+                console.log("morir");
+                this.image = this.sprites.death.image;
+                this.maxFrames = this.sprites.death.maxFrames;
                 this.currentFrame = 0;
                 break;
         }
@@ -233,3 +240,4 @@ export const enemy = new Fighter({
     }
 });
 
+export default Fighter;

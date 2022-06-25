@@ -28,9 +28,21 @@ function animate() {
     window.requestAnimationFrame(animate);  // Set this as a recursive function.
     background.update();
     shop.update();
-    player.update();
-    enemy.update();
 
+    if (player.health > 0){ // Allow movement and attacks only if player is alive.
+        player.update();
+    } else {    // If is not alive, then only draw the player on the screen.
+        player.animateFrames()
+        player.draw();
+    }
+
+    if (enemy.health > 0){
+        enemy.update();
+    } else {
+        enemy.animateFrames()
+        enemy.draw();
+    }
+    
     player.velocity.x = 0;  // Reset the "x" velocity of the player each frame. So it doesn't "slide" every frame.
     enemy.velocity.x = 0;   // Same for the enemy.
 
@@ -43,14 +55,14 @@ function animate() {
     }
 
     // Player is attacking and tries to hit his enemy.
-    if (isHitting({ rectangle1: player, rectangle2: enemy }) && player.isAttacking) {
+    if (isHitting({ rectangle1: player, rectangle2: enemy }) && player.isAttacking && player.health > 0) {
         player.isAttacking = false; // Reset the attack.
         enemy.health -= 20;
         document.querySelector('#enemyHealth').style.width = enemy.health + '%';
     }
 
     // Enemy is attacking and tries to hit the player.
-    if (isHitting({ rectangle1: enemy, rectangle2: player }) && enemy.isAttacking) {
+    if (isHitting({ rectangle1: enemy, rectangle2: player }) && enemy.isAttacking && enemy.health > 0) {
         enemy.isAttacking = false;
         player.health -= 20;
         document.querySelector('#playerHealth').style.width = player.health + '%';
@@ -74,7 +86,11 @@ function determineWinner({ player, enemy, timerID }) {
         document.querySelector('#result').innerHTML = 'Tie!';   // Player's and enemy's health are the same.
     } else if (player.health > enemy.health) {
         document.querySelector('#result').innerHTML = 'Player won!'; // Player's health is greater.
+        enemy.health = 0;
+        enemy.switchSprite('death');
     } else {
         document.querySelector('#result').innerHTML = 'Enemy won!'; // Enemy's health is greater.
+        player.health = 0;
+        player.switchSprite('death');
     }
 }

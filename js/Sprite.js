@@ -1,3 +1,5 @@
+import Fighter from './Fighter.js'
+
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
@@ -30,8 +32,10 @@ class Sprite {
         if (this.elapsedFrames % this.holdFrames === 0) {
             if (this.currentFrame < this.maxFrames - 1) {
                 this.currentFrame++;    // Jump to the next frame.
-            } else {
-                this.currentFrame = 0;  // Reset the current frame to the beginning of the animation.
+            } else {    
+                if (this instanceof Fighter && this.health > 0) { // To avoid the death anim reset.
+                    this.currentFrame = 0;  // Reset the current frame to the beginning of the animation.
+                }
             }
         }
     }
