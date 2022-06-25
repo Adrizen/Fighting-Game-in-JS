@@ -7,7 +7,7 @@ canvas.height = 576;
 const gravity = 1;
 
 class Fighter extends Sprite {
-    constructor({ position, offset, imageSrc, scale, maxFrames, holdFrames, offsetFrame = { x: 0, y: 0 }, sprites, keys }) {
+    constructor({ position, offset, imageSrc, scale, maxFrames, holdFrames, offsetFrame = { x: 0, y: 0 }, sprites, keys, attackTime }) {
         super({ position, imageSrc, scale, maxFrames, holdFrames, offsetFrame });
         this.height = 150;
         this.width = 50;
@@ -32,11 +32,8 @@ class Fighter extends Sprite {
             sprites[sprite].image.src = sprites[sprite].imageSrc;
         }
         this.keys = keys;
-    }
-
-    attack() {
-        this.isAttacking = true;
-        setTimeout(() => { this.isAttacking = false }, 100)
+        this.attackTime = attackTime;   // ms to perform his attack animation.
+        this.attackCooldown = true; // Fighter can only attack when his cooldown is up.
     }
 
     movement() {
@@ -95,22 +92,33 @@ class Fighter extends Sprite {
                 this.maxFrames = this.sprites.run.maxFrames;
                 break;
             case 'jump':
-                console.log("saltar")
-                this.image = this.sprites.jump.image;
-                this.maxFrames = this.sprites.jump.maxFrames;
-                this.currentFrame = 0;
+                if (this.image !== this.sprites.attack1.image) {
+                    console.log("saltar")
+                    this.image = this.sprites.jump.image;
+                    this.maxFrames = this.sprites.jump.maxFrames;
+                    this.currentFrame = 0;
+                }
                 break;
             case 'fall':
-                console.log("caer")
-                this.image = this.sprites.fall.image;
-                this.maxFrames = this.sprites.fall.maxFrames;
-                this.currentFrame = 0;
+                if (this.image !== this.sprites.attack1.image){
+                    console.log("caer")
+                    this.image = this.sprites.fall.image;
+                    this.maxFrames = this.sprites.fall.maxFrames;
+                    this.currentFrame = 0;
+                }
                 break;
             case 'death':
                 console.log("morir");
                 this.image = this.sprites.death.image;
                 this.maxFrames = this.sprites.death.maxFrames;
                 this.currentFrame = 0;
+                break;
+            case 'attack':
+                console.log("attack")
+                this.image = this.sprites.attack1.image;
+                this.maxFrames = this.sprites.attack1.maxFrames;
+                this.currentFrame = 0;
+                setTimeout(() => {  this.isAttacking = false }, this.attackTime)
                 break;
         }
     }
@@ -175,8 +183,8 @@ export const player = new Fighter({
         ' ': {
             pressed: false
         }
-
-    }
+    },
+    attackTime: 400
 })
 
 // Create enemy sprite.
@@ -237,7 +245,8 @@ export const enemy = new Fighter({
         'Control': {
             pressed: false
         }
-    }
+    },
+    attackTime: 350
 });
 
 export default Fighter;

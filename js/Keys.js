@@ -40,7 +40,8 @@ export function loadKeyDownEvents(player, enemy) {
                 }
                 break;
             case ' ':   // Player attack with space bar.
-                player.attack();
+                player.isAttacking = true;
+                player.lastKey = ' ';
                 break;
 
 
@@ -59,7 +60,8 @@ export function loadKeyDownEvents(player, enemy) {
                 }
                 break;
             case 'Control': // Enemy attack with control key.
-                enemy.attack();
+                enemy.isAttacking = true;
+                enemy.lastKey = 'Control'
                 break;
         }
     });
@@ -88,7 +90,7 @@ export function loadkeyUpEvents(player, enemy) {
 }
 
 
-
+// TODO: Move this to a better place lol
 // Detect whenever the attackBox of a sprite hits another sprite while attacking.
 export function isHitting({ rectangle1, rectangle2 }) {
     return (rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x &&

@@ -28,44 +28,44 @@ function animate() {
     window.requestAnimationFrame(animate);  // Set this as a recursive function.
     background.update();
     shop.update();
-
-    if (player.health > 0){ // Allow movement and attacks only if player is alive.
-        player.update();
-    } else {    // If is not alive, then only draw the player on the screen.
-        player.animateFrames()
-        player.draw();
-    }
-
-    if (enemy.health > 0){
-        enemy.update();
-    } else {
-        enemy.animateFrames()
-        enemy.draw();
-    }
-    
+    update(player);
+    update(enemy);
     player.velocity.x = 0;  // Reset the "x" velocity of the player each frame. So it doesn't "slide" every frame.
     enemy.velocity.x = 0;   // Same for the enemy.
 
-    if (!player.movement()) {  // If player is not running, set his sprite to idle.
+    if (!player.movement() && !player.isAttacking) {  // If player is not running, set his sprite to idle.
         player.switchSprite('idle');
     }
 
-    if (!enemy.movement()) {    // Enemy movement in the canvas.
+    if (!enemy.movement() && !enemy.isAttacking) {    // Enemy movement in the canvas.
         enemy.switchSprite('idle')
     }
 
-    // Player is attacking and tries to hit his enemy.
-    if (isHitting({ rectangle1: player, rectangle2: enemy }) && player.isAttacking && player.health > 0) {
-        player.isAttacking = false; // Reset the attack.
-        enemy.health -= 20;
-        document.querySelector('#enemyHealth').style.width = enemy.health + '%';
+    // Player is attacking and tries to hit the enemy.
+    // Make the attack animation. If hit is successful then subtract HP.
+    if (player.isAttacking && player.health > 0 && player.attackCooldown) {
+        player.attackCooldown = false;
+        setTimeout(() => { player.attackCooldown = true }, 1000)
+        player.switchSprite('attack')
+        if (isHitting({ rectangle1: player, rectangle2: enemy })) {
+            //player.attack(enemy); // TODO: Make below a function?
+            enemy.health -= 20;
+            document.querySelector('#enemyHealth').style.width = enemy.health + '%';
+        }
     }
 
+    // TODO: Merge this shit.
     // Enemy is attacking and tries to hit the player.
-    if (isHitting({ rectangle1: enemy, rectangle2: player }) && enemy.isAttacking && enemy.health > 0) {
-        enemy.isAttacking = false;
-        player.health -= 20;
-        document.querySelector('#playerHealth').style.width = player.health + '%';
+    // Make the attack animation. If hit is successful then subtract HP.
+    if (enemy.isAttacking && enemy.health > 0 && enemy.attackCooldown) {
+        enemy.attackCooldown = false;
+        setTimeout(() => { enemy.attackCooldown = true }, 1000)
+        enemy.switchSprite('attack')
+        if (isHitting({ rectangle1: enemy, rectangle2: player })) {
+            //enemy.attack(player);
+            player.health -= 20;
+            document.querySelector('#playerHealth').style.width = player.health + '%';
+        }
     }
 
     if (!gameEnded) {
@@ -74,6 +74,16 @@ function animate() {
         }
     }
 
+}
+
+// Fighter is alive can perform any action, if it's not then only get drawn.
+function update(fighter) {
+    if (fighter.health > 0) {   // Allow movement and attacks only if player is alive.
+        fighter.update();
+    } else {    // If is not alive, then only draw the player on the screen.
+        fighter.animateFrames()
+        fighter.draw();
+    }
 }
 
 animate();
