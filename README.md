@@ -9,6 +9,6 @@ Current state: 🟨 (playable)
 * [Kenji](https://luizmelo.itch.io/martial-hero-2) (Credits: LuizMelo)
 * [Background Oak Woods](https://brullov.itch.io/oak-woods) (Credits: brullov)
 
-▶️ Play at: TBA
+▶️ Play at: https://fighting-game-in-js.netlify.app/html/index.html
 
 📸 Screenshots: Soon™
