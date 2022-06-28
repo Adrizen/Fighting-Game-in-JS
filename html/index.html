@@ -11,15 +11,14 @@
 
 <body>
 
-    <!-- Red container div -->
     <div class="container">
 
-        <!-- Smaller red containter div -->
         <div class="hud">
 
             <!-- Player's health -->
             <div class="healthLayout">
-                <div class="remainingHealthbar"></div> <!-- TODO: Arreglar nombre barras. La vida del jugador se reduzca hacia el timer. -->
+                <div class="remainingHealthbar"></div>
+                <!-- TODO: Arreglar nombre barras. La vida del jugador se reduzca hacia el timer. -->
                 <div id="playerHealth" class="totalHealthBar"></div>
             </div>
             <!-- Timer -->
@@ -31,9 +30,26 @@
                 <div id="enemyHealth" class="totalHealthBar"></div>
             </div>
         </div>
-        <div id="result" class="result" > XDDDDDD </div>
-        <canvas id="gameWindow"> </canvas>
+        <div id="result" class="result"> result </div>
+        <div class="game">
+            <canvas id="gameWindow"> </canvas>
+        </div>
 
+    </div>
+
+    <div class="information">
+        <div class="keymapping">
+            <div class="keys">
+                <h1> Player 1 </h1>
+                <p> Movement: WASD </p>
+                <p> Attack: Spacebar </p>
+            </div>
+            <div class="keys">
+                <h1> Player 2 </h1>
+                <p> Movement: Arrow keys </p>
+                <p> Attack: Control key </p>
+            </div>
+        </div>
     </div>
 
     <script type="module" src="../js/index.js"> </script>

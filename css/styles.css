@@ -1,17 +1,29 @@
-* {
+@font-face {
+    font-family: 'silver';
+    src: url(../assets/fonts/Silver.ttf);
+}
+
+body {
     box-sizing: border-box;
+    background-color:seashell;
+}
+
+h1 {
+    margin: 0px;
 }
 
 .container {
     position: relative;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 50px;
 }
 
 .hud {
     position: absolute;
     display: flex;
-    width: 100%;
-    /* Total width of the canvas */
+    width: 65%;
     align-items: center;
     padding: 20px;
 }
@@ -57,4 +69,24 @@
     right: 0;
     bottom: 0;
     left: 0;
+}
+
+.game {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.keymapping {
+    display: flex;
+    justify-content: center;
+    font-family: 'silver';
+    font-size: 40px;
+}
+
+.keys {
+    margin: 30px;
+    padding: 40px;
+    border: 2px solid black;
 }
