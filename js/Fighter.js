@@ -34,6 +34,7 @@ class Fighter extends Sprite {
         this.keys = keys;
         this.attackTime = attackTime;   // ms to perform his attack animation.
         this.attackCooldown = true; // Fighter can only attack when his cooldown is up.
+        this.isTakingHit = false;   // Fighter is taking a hit from another fighter.
     }
 
     movement() {
@@ -87,9 +88,11 @@ class Fighter extends Sprite {
                 }
                 break;
             case 'run':
-                console.log("correr")
-                this.image = this.sprites.run.image;
-                this.maxFrames = this.sprites.run.maxFrames;
+                if (!this.isAttacking && !this.isTakingHit) {   // Can only run if is not attacking or taking a hit
+                    console.log("correr")
+                    this.image = this.sprites.run.image;
+                    this.maxFrames = this.sprites.run.maxFrames;
+                }
                 break;
             case 'jump':
                 if (this.image !== this.sprites.attack1.image) {
@@ -100,14 +103,14 @@ class Fighter extends Sprite {
                 }
                 break;
             case 'fall':
-                if (this.image !== this.sprites.attack1.image){
+                if (this.image !== this.sprites.attack1.image) {    // Show attack anim while falling.
                     console.log("caer")
                     this.image = this.sprites.fall.image;
                     this.maxFrames = this.sprites.fall.maxFrames;
                     this.currentFrame = 0;
                 }
                 break;
-            case 'death':
+            case 'death':   //TODO: Hacer que el fighter caiga al suelo al morir.
                 console.log("morir");
                 this.image = this.sprites.death.image;
                 this.maxFrames = this.sprites.death.maxFrames;
@@ -118,7 +121,14 @@ class Fighter extends Sprite {
                 this.image = this.sprites.attack1.image;
                 this.maxFrames = this.sprites.attack1.maxFrames;
                 this.currentFrame = 0;
-                setTimeout(() => {  this.isAttacking = false }, this.attackTime)
+                setTimeout(() => { this.isAttacking = false }, this.attackTime)
+                break;
+            case 'takehit':
+                console.log("take hit");
+                this.image = this.sprites.takeHit.image;
+                this.maxFrames = this.sprites.takeHit.maxFrames;
+                this.currentFrame = 0;
+                setTimeout(() => { this.isTakingHit = false }, 500);
                 break;
         }
     }
@@ -165,7 +175,7 @@ export const player = new Fighter({
             maxFrames: 6,
         },
         takeHit: {
-            imageSrc: '/assets/img/samuraiMack/Take hit.png',
+            imageSrc: '/assets/img/samuraiMack/Take hit White.png',
             maxFrames: 4,
         }
 
@@ -228,7 +238,7 @@ export const enemy = new Fighter({
             maxFrames: 4,
         },
         takeHit: {
-            imageSrc: '/assets/img/kenji/Take hit.png',
+            imageSrc: '/assets/img/kenji/Take hit white.png',
             maxFrames: 3,
         }
     },

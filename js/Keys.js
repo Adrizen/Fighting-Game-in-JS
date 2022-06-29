@@ -24,6 +24,7 @@ export const keys = {
 export function loadKeyDownEvents(player, enemy) {
     // Whenever a key is pressed.
     window.addEventListener('keydown', (event) => {
+        event.preventDefault();
         switch (event.key) {
             // Player keys.
             case 'd':

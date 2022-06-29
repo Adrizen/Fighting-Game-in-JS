@@ -2,7 +2,7 @@ import { player, enemy } from './Fighter.js'
 import { background, shop } from './Sprite.js';
 import { loadKeyDownEvents, loadkeyUpEvents, isHitting } from './Keys.js'
 
-let timer = 10; // Game timer.
+let timer = 30; // Game timer.
 let timerID;    // Used to clearTimeout.
 let gameEnded = false;  // Flag to determinate whenever game's has ended or not.
 // TODO: hacer clase game.js? Y meter la lógica del juego en general.
@@ -33,11 +33,11 @@ function animate() {
     player.velocity.x = 0;  // Reset the "x" velocity of the player each frame. So it doesn't "slide" every frame.
     enemy.velocity.x = 0;   // Same for the enemy.
 
-    if (!player.movement() && !player.isAttacking) {  // If player is not running, set his sprite to idle.
+    if (!player.movement() && !player.isAttacking && !player.isTakingHit ) {  // If player is not running, set his sprite to idle.
         player.switchSprite('idle');
     }
 
-    if (!enemy.movement() && !enemy.isAttacking) {    // Enemy movement in the canvas.
+    if (!enemy.movement() && !enemy.isAttacking && !enemy.isTakingHit ) {    // Enemy movement in the canvas.
         enemy.switchSprite('idle')
     }
 
@@ -51,6 +51,8 @@ function animate() {
             //player.attack(enemy); // TODO: Make below a function?
             enemy.health -= 20;
             document.querySelector('#enemyHealth').style.width = enemy.health + '%';
+            enemy.switchSprite('takehit');
+            enemy.isTakingHit = true;
         }
     }
 
@@ -65,6 +67,8 @@ function animate() {
             //enemy.attack(player);
             player.health -= 20;
             document.querySelector('#playerHealth').style.width = player.health + '%';
+            player.switchSprite('takehit');
+            player.isTakingHit = true;
         }
     }
 
