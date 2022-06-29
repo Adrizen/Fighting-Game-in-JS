@@ -23,7 +23,7 @@ h1 {
 .hud {
     position: absolute;
     display: flex;
-    width: 65%;
+    width: 50%;
     align-items: center;
     padding: 20px;
 }
