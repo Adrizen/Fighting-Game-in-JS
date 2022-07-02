@@ -1,6 +1,7 @@
 # A simple two-player fighting game made in JS using HTML Canvas.
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/045d2c4a-4b04-46b7-aec6-d61990e78c36/deploy-status)](https://app.netlify.com/sites/fighting-game-in-js/deploys)
+
 Current state: 🟨 (playable)
 
 ▶️ Play at: https://fighting-game-in-js.netlify.app/html/index.html
@@ -13,4 +14,10 @@ Current state: 🟨 (playable)
 * [Background Oak Woods](https://brullov.itch.io/oak-woods) (Credits: brullov)
 * [Font](https://poppyworks.itch.io/silver) (Credits: see page)
 
-📸 Screenshots: Soon™
+📸 Screenshots: 
+
+<img src="https://imgur.com/jgt0aZf.png" height="70%" width="70%" >
+
+<img src="https://imgur.com/Bp6BYlR.png" height="70%" width="70%" >
+
+<img src="https://imgur.com/9Cs7KBi.png" height="70%" width="70%" >
