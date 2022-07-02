@@ -7,8 +7,9 @@ canvas.height = 576;
 const gravity = 1;
 
 class Fighter extends Sprite {
-    constructor({ position, offset, imageSrc, scale, maxFrames, holdFrames, offsetFrame = { x: 0, y: 0 }, sprites, keys, attackTime }) {
+    constructor({ name, position, offset, imageSrc, scale, maxFrames, holdFrames, offsetFrame = { x: 0, y: 0 }, sprites, keys, attackTime }) {
         super({ position, imageSrc, scale, maxFrames, holdFrames, offsetFrame });
+        this.name = name;
         this.height = 150;
         this.width = 50;
         this.velocity = { x: 0, y: 0 } // Initial velocity is 0 in both axis.
@@ -35,6 +36,29 @@ class Fighter extends Sprite {
         this.attackTime = attackTime;   // ms to perform his attack animation.
         this.attackCooldown = true; // Fighter can only attack when his cooldown is up.
         this.isTakingHit = false;   // Fighter is taking a hit from another fighter.
+    }
+
+    attack(enemyFighter) {
+        if (this.isAttacking && this.health > 0 && this.attackCooldown) {
+            this.attackCooldown = false;
+            setTimeout(() => { this.attackCooldown = true }, 1000)
+            this.switchSprite('attack')
+            if (this.isHitting(enemyFighter)) {
+                enemyFighter.health -= 20;
+                console.log('#' + enemyFighter.name + 'Health')
+                document.querySelector('#' + enemyFighter.name + 'Health').style.width = enemyFighter.health + '%';
+                enemyFighter.switchSprite('takehit');
+                enemyFighter.isTakingHit = true;
+            }
+        }
+    }
+
+    // Check if this fighter attackbox is hitting the enemy fighter.
+    isHitting(enemyFighter) {
+        return (this.attackBox.position.x + this.attackBox.width >= enemyFighter.position.x &&
+            this.attackBox.position.x <= enemyFighter.position.x + enemyFighter.width &&
+            this.attackBox.position.y + this.attackBox.height >= enemyFighter.position.y &&
+            this.attackBox.position.y <= enemyFighter.position.y + enemyFighter.height)
     }
 
     movement() {
@@ -81,7 +105,7 @@ class Fighter extends Sprite {
         switch (sprite) {
             case 'idle':
                 if (this.image !== this.sprites.idle.image && !this.inTheAir && this.health > 0) {
-                    console.log("idle")
+                    //console.log("idle")
                     this.image = this.sprites.idle.image;
                     this.maxFrames = this.sprites.idle.maxFrames;
                     this.currentFrame = 0;  // To avoid flickering when changing between different sprites.
@@ -89,14 +113,14 @@ class Fighter extends Sprite {
                 break;
             case 'run':
                 if (!this.isAttacking && !this.isTakingHit) {   // Can only run if is not attacking or taking a hit
-                    console.log("correr")
+                    //console.log("correr")
                     this.image = this.sprites.run.image;
                     this.maxFrames = this.sprites.run.maxFrames;
                 }
                 break;
             case 'jump':
                 if (this.image !== this.sprites.attack1.image) {
-                    console.log("saltar")
+                    //console.log("saltar")
                     this.image = this.sprites.jump.image;
                     this.maxFrames = this.sprites.jump.maxFrames;
                     this.currentFrame = 0;
@@ -104,27 +128,27 @@ class Fighter extends Sprite {
                 break;
             case 'fall':
                 if (this.image !== this.sprites.attack1.image) {    // Show attack anim while falling.
-                    console.log("caer")
+                    //console.log("caer")
                     this.image = this.sprites.fall.image;
                     this.maxFrames = this.sprites.fall.maxFrames;
                     this.currentFrame = 0;
                 }
                 break;
             case 'death':   //TODO: Hacer que el fighter caiga al suelo al morir.
-                console.log("morir");
+                //console.log("morir");
                 this.image = this.sprites.death.image;
                 this.maxFrames = this.sprites.death.maxFrames;
                 this.currentFrame = 0;
                 break;
             case 'attack':
-                console.log("attack")
+                //console.log("attack")
                 this.image = this.sprites.attack1.image;
                 this.maxFrames = this.sprites.attack1.maxFrames;
                 this.currentFrame = 0;
                 setTimeout(() => { this.isAttacking = false }, this.attackTime)
                 break;
             case 'takehit':
-                console.log("take hit");
+                //console.log("take hit");
                 this.image = this.sprites.takeHit.image;
                 this.maxFrames = this.sprites.takeHit.maxFrames;
                 this.currentFrame = 0;
@@ -134,8 +158,12 @@ class Fighter extends Sprite {
     }
 }
 
+// Detect whenever the attackBox of this fighter hits another fighter while attacking.
+
+
 // Create player sprite.
 export const player = new Fighter({
+    name: "player",
     position: {
         x: 0,
         y: 0
@@ -199,9 +227,10 @@ export const player = new Fighter({
 
 // Create enemy sprite.
 export const enemy = new Fighter({
+    name: "enemy",
     position: {
-        x: 400,
-        y: 100
+        x: 950,
+        y: 0
     },
     offset: {
         x: -50,

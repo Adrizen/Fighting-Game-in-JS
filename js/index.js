@@ -1,6 +1,6 @@
 import { player, enemy } from './Fighter.js'
 import { background, shop } from './Sprite.js';
-import { loadKeyDownEvents, loadkeyUpEvents, isHitting } from './Keys.js'
+import { loadKeyDownEvents, loadkeyUpEvents } from './Keys.js'
 
 let timer = 30; // Game timer.
 let timerID;    // Used to clearTimeout.
@@ -41,36 +41,9 @@ function animate() {
         enemy.switchSprite('idle')
     }
 
-    // Player is attacking and tries to hit the enemy.
-    // Make the attack animation. If hit is successful then subtract HP.
-    if (player.isAttacking && player.health > 0 && player.attackCooldown) {
-        player.attackCooldown = false;
-        setTimeout(() => { player.attackCooldown = true }, 1000)
-        player.switchSprite('attack')
-        if (isHitting({ rectangle1: player, rectangle2: enemy })) {
-            //player.attack(enemy); // TODO: Make below a function?
-            enemy.health -= 20;
-            document.querySelector('#enemyHealth').style.width = enemy.health + '%';
-            enemy.switchSprite('takehit');
-            enemy.isTakingHit = true;
-        }
-    }
-
-    // TODO: Merge this shit.
-    // Enemy is attacking and tries to hit the player.
-    // Make the attack animation. If hit is successful then subtract HP.
-    if (enemy.isAttacking && enemy.health > 0 && enemy.attackCooldown) {
-        enemy.attackCooldown = false;
-        setTimeout(() => { enemy.attackCooldown = true }, 1000)
-        enemy.switchSprite('attack')
-        if (isHitting({ rectangle1: enemy, rectangle2: player })) {
-            //enemy.attack(player);
-            player.health -= 20;
-            document.querySelector('#playerHealth').style.width = player.health + '%';
-            player.switchSprite('takehit');
-            player.isTakingHit = true;
-        }
-    }
+    // Check if a fighter is attacking.
+    player.attack(enemy);
+    enemy.attack(player);
 
     if (!gameEnded) {
         if (enemy.health <= 0 || player.health <= 0) {

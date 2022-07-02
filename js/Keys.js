@@ -24,7 +24,7 @@ export const keys = {
 export function loadKeyDownEvents(player, enemy) {
     // Whenever a key is pressed.
     window.addEventListener('keydown', (event) => {
-        event.preventDefault();
+        event.preventDefault(); // Prevent any keys' default behaviour i.e using the arrow keys to navigate the page.
         switch (event.key) {
             // Player keys.
             case 'd':
@@ -88,14 +88,4 @@ export function loadkeyUpEvents(player, enemy) {
                 break;
         }
     });
-}
-
-
-// TODO: Move this to a better place lol
-// Detect whenever the attackBox of a sprite hits another sprite while attacking.
-export function isHitting({ rectangle1, rectangle2 }) {
-    return (rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x &&
-        rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width &&
-        rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y &&
-        rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
 }
