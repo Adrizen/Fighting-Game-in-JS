@@ -12,7 +12,7 @@ class Sprite {
         this.image.src = imageSrc;
         this.scale = scale;
         this.maxFrames = maxFrames;     // Maximum image's frames.
-        this.currentFrame = 0;
+        this.currentFrame = 0;          // Start of the animation.
         this.elapsedFrames = 0;         // How many frames have passed. Used for a smoother animation.
         this.holdFrames = holdFrames;   // How many frames to wait until update the image with another frame. Used for a smoother animation.
         this.offsetFrame = offsetFrame;
@@ -32,9 +32,13 @@ class Sprite {
         if (this.elapsedFrames % this.holdFrames === 0) {
             if (this.currentFrame < this.maxFrames - 1) {
                 this.currentFrame++;    // Jump to the next frame.
-            } else {    
-                if (this instanceof Fighter && this.health > 0) { // To avoid the death anim reset.
-                    this.currentFrame = 0;  // Reset the current frame to the beginning of the animation.
+            } else {
+                if (this instanceof Fighter) { 
+                    if (this.health > 0) {  // This avoids resetting death animation.
+                        this.currentFrame = 0;  // Reset the current fighter frame to the beginning of the animation.
+                    }
+                } else {
+                    this.currentFrame = 0;  // Reset the current sprite frame to the beginning of the animation.
                 }
             }
         }
@@ -62,7 +66,8 @@ export const shop = new Sprite({
     },
     imageSrc: '/assets/img/shop.png',
     scale: 2.75,
-    maxFrames: 6
+    maxFrames: 6,
+    holdFrames: 9
 })
 
 export default Sprite;
