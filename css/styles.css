@@ -35,32 +35,37 @@ h1 {
 }
 
 .remainingHealthbar {
-    background-color: yellow;
+    background-color: #EF4444;
     height: 30px;
     width: 100%;
 }
 
 .totalHealthBar{
     position: absolute;
-    background-color: green;
+    background-color: #8B5CF6;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+    display: flex;
 }
 
 .timer {
-    background-color: red;
-    height: 100px;
-    width: 100px;
+    background-color: wheat;
+    font-family: 'silver';
+    font-size: 35px;
+    height: 50px;
+    width: 75px;
     flex-shrink: 0;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
 }
 
 .result {
     position: absolute;
+    font-family: 'silver';
+    font-size: 70px;
     display: none;
     align-items: center;
     justify-content: center;

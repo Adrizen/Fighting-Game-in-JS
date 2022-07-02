@@ -5,7 +5,7 @@ import { loadKeyDownEvents, loadkeyUpEvents } from './Keys.js'
 let timer = 30; // Game timer.
 let timerID;    // Used to clearTimeout.
 let gameEnded = false;  // Flag to determinate whenever game's has ended or not.
-// TODO: hacer clase game.js? Y meter la lógica del juego en general.
+// TODO: Reset button.
 
 loadKeyDownEvents(player, enemy);   // Load player and enemy KeyDown events.
 loadkeyUpEvents(player, enemy);     // Load player and enemy KeyUp events.
@@ -72,11 +72,11 @@ function determineWinner({ player, enemy, timerID }) {
     if (player.health === enemy.health) {
         document.querySelector('#result').innerHTML = 'Tie!';   // Player's and enemy's health are the same.
     } else if (player.health > enemy.health) {
-        document.querySelector('#result').innerHTML = 'Player won!'; // Player's health is greater.
+        document.querySelector('#result').innerHTML = 'Player 1 won!'; // Player's health is greater.
         enemy.health = 0;
         enemy.switchSprite('death');
     } else {
-        document.querySelector('#result').innerHTML = 'Enemy won!'; // Enemy's health is greater.
+        document.querySelector('#result').innerHTML = 'Player 2 won!'; // Enemy's health is greater.
         player.health = 0;
         player.switchSprite('death');
     }
