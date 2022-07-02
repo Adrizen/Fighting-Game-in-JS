@@ -2,7 +2,7 @@ import Sprite from './Sprite.js'
 const canvas = document.querySelector('canvas');
 
 // Canvas' dimension.
-canvas.width = 1024;    // TODO: Hacer más grande el canvas?
+canvas.width = 1024;
 canvas.height = 576;
 const gravity = 1;
 
@@ -24,8 +24,8 @@ class Fighter extends Sprite {
                 y: this.position.y
             },
             offSet: offset, // AttackBox's offset.
-            width: 100,
-            height: 50
+            width: 150,
+            height: 150
         };  // End attack box.
         this.sprites = sprites;
         for (const sprite in this.sprites) {
@@ -46,7 +46,7 @@ class Fighter extends Sprite {
             if (this.isHitting(enemyFighter)) {
                 enemyFighter.health -= 20;
                 console.log('#' + enemyFighter.name + 'Health')
-                document.querySelector('#' + enemyFighter.name + 'Health').style.width = enemyFighter.health + '%';
+                gsap.to('#' + enemyFighter.name + 'Health', { width: enemyFighter.health + '%' });
                 enemyFighter.switchSprite('takehit');
                 enemyFighter.isTakingHit = true;
             }
@@ -169,7 +169,7 @@ export const player = new Fighter({
         y: 0
     },
     offset: {
-        x: 0,
+        x: 75,
         y: 0
     },
     imageSrc: '/assets/img/samuraiMack/Idle.png',
@@ -233,7 +233,7 @@ export const enemy = new Fighter({
         y: 0
     },
     offset: {
-        x: -50,
+        x: -160,
         y: 0
     },
     imageSrc: '/assets/img/kenji/Idle.png',
