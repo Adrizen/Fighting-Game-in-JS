@@ -5,11 +5,7 @@
 
 body {
     box-sizing: border-box;
-    background-color:seashell;
-}
-
-h1 {
-    margin: 0px;
+    background-color: seashell
 }
 
 .container {
@@ -22,7 +18,7 @@ h1 {
 
 .hud {
     position: absolute;
-    display: flex;
+    display: none;
     width: 50%;
     align-items: center;
     padding: 20px;
@@ -40,7 +36,7 @@ h1 {
     width: 100%;
 }
 
-.totalHealthBar{
+.totalHealthBar {
     position: absolute;
     background-color: #8B5CF6;
     top: 0;
@@ -83,6 +79,10 @@ h1 {
     justify-content: center;
 }
 
+#gameWindow {
+    border: 2px solid black;
+}
+
 .keymapping {
     display: flex;
     justify-content: center;
@@ -94,4 +94,42 @@ h1 {
     margin: 30px;
     padding: 40px;
     border: 2px solid black;
+}
+
+.keys h1 {
+    margin: 0px
+}
+
+.menu {
+    font-family: silver;
+    color: black;
+    position: absolute;
+    width: 1024px;
+    height: 576px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    font-size: 160px;
+}
+
+.menuOption {
+    font-size: 60px;
+    padding: 10px 10px 5px 10px;
+    cursor: pointer;
+    transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+.menuOption:hover {
+    box-shadow: inset 300px 0 0 0 #9eade9;
+    color: black;
+}
+
+.author {
+    padding-top: 10px;
+    font-size: 30px;
+    font-style: italic;
 }

@@ -2,6 +2,8 @@ import { player, enemy } from './Fighter.js'
 import { background, shop } from './Sprite.js';
 import { loadKeyDownEvents, loadkeyUpEvents } from './Keys.js'
 
+const canvas = document.querySelector('canvas');
+const c = canvas.getContext('2d');
 let timer = 30; // Game timer.
 let timerID;    // Used to clearTimeout.
 let gameEnded = false;  // Flag to determinate whenever game's has ended or not.
@@ -9,6 +11,29 @@ let gameEnded = false;  // Flag to determinate whenever game's has ended or not.
 
 loadKeyDownEvents(player, enemy);   // Load player and enemy KeyDown events.
 loadkeyUpEvents(player, enemy);     // Load player and enemy KeyUp events.
+
+const onePlayer = document.getElementById('1player');
+const twoPlayers = document.getElementById('2players');
+onePlayer.addEventListener("click", () => {
+    //setupOnePlayer();
+    //startGame();
+});
+twoPlayers.addEventListener("click", () => {
+    //setupTwoPlayers();
+    startGame();
+});
+
+// Main function to start the game after the menu is dismissed.
+function startGame() {
+    document.getElementById('menu').style.display = "none"; // Hide the menu.
+    c.fillRect(0, 0, canvas.width, canvas.height);  // Simulate loading with black screen lol
+    setTimeout(() => {
+        animate();  // Start recursive animate function.
+        decreaseTimer();    // Start the timer countdown.
+        document.getElementById('hud').style.display = "flex";  // Show the hud.
+    }, 1000)    // Wait 1 sec to start the game.
+}
+
 
 // Decrease the timer. If it reaches 0 announce the winner based on remaining health.
 function decreaseTimer() {
@@ -21,8 +46,6 @@ function decreaseTimer() {
     }
 }
 
-decreaseTimer();
-
 // Animate the sprites every frame.
 function animate() {
     window.requestAnimationFrame(animate);  // Set this as a recursive function.
@@ -33,11 +56,11 @@ function animate() {
     player.velocity.x = 0;  // Reset the "x" velocity of the player each frame. So it doesn't "slide" every frame.
     enemy.velocity.x = 0;   // Same for the enemy.
 
-    if (!player.movement() && !player.isAttacking && !player.isTakingHit ) {  // If player is not running, set his sprite to idle.
+    if (!player.movement() && !player.isAttacking && !player.isTakingHit) {  // If player is not running, set his sprite to idle.
         player.switchSprite('idle');
     }
 
-    if (!enemy.movement() && !enemy.isAttacking && !enemy.isTakingHit ) {    // Enemy movement in the canvas.
+    if (!enemy.movement() && !enemy.isAttacking && !enemy.isTakingHit) {    // If enemy is not running, set his sprite to idle.
         enemy.switchSprite('idle')
     }
 
@@ -62,8 +85,6 @@ function update(fighter) {
         fighter.draw();
     }
 }
-
-animate();
 
 function determineWinner({ player, enemy, timerID }) {
     clearTimeout(timerID);  // Stop the timer, the game ended.

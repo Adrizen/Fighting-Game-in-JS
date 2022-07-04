@@ -6,14 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/styles.css">
-    <title>Juego épico</title>
+    <title>Fighting game</title>
 </head>
 
 <body>
 
     <div class="container">
 
-        <div class="hud">
+        <div id="menu" class="menu">
+            <div class="title">
+                Fighting Game!
+            </div>
+            <div id="1player" class="menuOption">
+                Player vs IA (Not yet implemented)
+            </div>
+            <div id="2players" class="menuOption">
+                Player vs Player
+            </div>
+            <div class="author">Made by Adrizen</div>
+        </div>
+
+        <div id="hud" class="hud">
 
             <!-- Player's health -->
             <div class="healthLayout">
@@ -52,7 +65,9 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js" integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
+        integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="module" src="../js/index.js"> </script>
 </body>
 
