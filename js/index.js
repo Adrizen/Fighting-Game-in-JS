@@ -15,25 +15,23 @@ loadkeyUpEvents(player, enemy);     // Load player and enemy KeyUp events.
 const onePlayer = document.getElementById('1player');
 const twoPlayers = document.getElementById('2players');
 onePlayer.addEventListener("click", () => {
-    //setupOnePlayer();
-    //startGame();
+    intervalBot();
+    startGame();
 });
 twoPlayers.addEventListener("click", () => {
-    //setupTwoPlayers();
     startGame();
 });
 
 // Main function to start the game after the menu is dismissed.
 function startGame() {
     document.getElementById('menu').style.display = "none"; // Hide the menu.
-    c.fillRect(0, 0, canvas.width, canvas.height);  // Simulate loading with black screen lol
+    c.fillRect(0, 0, canvas.width, canvas.height);          // Simulate loading with black screen lol
     setTimeout(() => {
-        animate();  // Start recursive animate function.
-        decreaseTimer();    // Start the timer countdown.
-        document.getElementById('hud').style.display = "flex";  // Show the hud.
+    animate();          // Start recursive animate function.
+    decreaseTimer();    // Start the timer countdown.
+    document.getElementById('hud').style.display = "flex";  // Show the hud.
     }, 1000)    // Wait 1 sec to start the game.
 }
-
 
 // Decrease the timer. If it reaches 0 announce the winner based on remaining health.
 function decreaseTimer() {
@@ -61,7 +59,7 @@ function animate() {
     }
 
     if (!enemy.movement() && !enemy.isAttacking && !enemy.isTakingHit) {    // If enemy is not running, set his sprite to idle.
-        enemy.switchSprite('idle')
+        enemy.switchSprite('idle')  // TODO: Disable enemy movement for arrow keys when playing VS IA.
     }
 
     // Check if a fighter is attacking.
@@ -73,7 +71,39 @@ function animate() {
             determineWinner({ player, enemy, timerID });
         }
     }
+}
 
+// Manages the behavior of the bot, his movement is completly random right now.
+function intervalBot() {
+    setInterval(botMoves, 1000);    // Evaluates if moving every 1 second.
+    setInterval(botAttack, 1000);   // Evaluates if attacking every 1 second.
+}
+
+// Bot moves randomly: a 45% chances of going forward, another 45% of going backward and a 10% of not moving. This every 1 second.
+// The period of time the bot is moving is random too: 'randomFloat * 4000'
+function botMoves() {
+    let randomFloat = Math.random();
+    //console.log(randomFloat)
+    if (randomFloat < 0.45) {   // Forwards.
+        window.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'ArrowLeft' }))
+        setTimeout(() => {
+            window.dispatchEvent(new KeyboardEvent('keyup', { 'key': 'ArrowLeft' }))
+        }, randomFloat * 3000)
+    } else if (randomFloat < 0.85) {    // Backwards.
+        window.dispatchEvent(new KeyboardEvent('keydown', { 'key': 'ArrowRight' }))
+        setTimeout(() => {
+            window.dispatchEvent(new KeyboardEvent('keyup', { 'key': 'ArrowRight' }))
+        }, randomFloat * 3000)
+    }
+}
+
+// Bot attacks the player if in range and his cooldown is available.
+function botAttack() {
+    if (enemy.attackCooldown && enemy.isHitting(player)) {
+        enemy.isAttacking = true;
+        enemy.attack(player);
+        setTimeout(() => { enemy.isAttacking = false; }, 1000)
+    }
 }
 
 // Fighter is alive can perform any action, if it's not then only get drawn.

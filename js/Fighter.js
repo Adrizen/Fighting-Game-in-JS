@@ -45,7 +45,6 @@ class Fighter extends Sprite {
             this.switchSprite('attack')
             if (this.isHitting(enemyFighter)) {
                 enemyFighter.health -= 20;
-                console.log('#' + enemyFighter.name + 'Health')
                 gsap.to('#' + enemyFighter.name + 'Health', { width: enemyFighter.health + '%' });
                 enemyFighter.switchSprite('takehit');
                 enemyFighter.isTakingHit = true;
