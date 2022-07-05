@@ -1,8 +1,8 @@
-# A simple two-player fighting game made in JS using HTML Canvas.
+# A simple fighting game made in JS using HTML Canvas.
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/045d2c4a-4b04-46b7-aec6-d61990e78c36/deploy-status)](https://app.netlify.com/sites/fighting-game-in-js/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/045d2c4a-4b04-46b7-aec6-d61990e78c36/deploy-status)](https://app.netlify.com/sites/fighting-game-in-js/deploys) ![my badge](https://badgen.net/badge/Status/Playable/green?icon=chrome)
 
-Current state: 🟨 (playable)
+Currently with 2 game modes: Player vs AI and Player vs Player.
 
 ▶️ Play at: https://fighting-game-in-js.netlify.app/html/index.html
 
@@ -15,6 +15,8 @@ Current state: 🟨 (playable)
 * [Font](https://poppyworks.itch.io/silver) (Credits: see page)
 
 📸 Screenshots: 
+
+<img src="https://imgur.com/5lhDg9A.png" height="70%" width="70%" >
 
 <img src="https://imgur.com/jgt0aZf.png" height="70%" width="70%" >
 
