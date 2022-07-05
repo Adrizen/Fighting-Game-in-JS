@@ -61,7 +61,7 @@ body {
 .result {
     position: absolute;
     font-family: 'silver';
-    font-size: 70px;
+    font-size: 100px;
     display: none;
     align-items: center;
     justify-content: center;
@@ -70,6 +70,7 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
+    text-shadow: 1px 0 0 black, -1px 0 0 black, 0 1px 0 black, 0 -1px 0 black, 1px 1px black, -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black;
 }
 
 .game {
@@ -117,14 +118,18 @@ body {
 }
 
 .menuOption {
+    border: solid black;
+    border-width: 1px 5px 5px 1px;
     font-size: 60px;
-    padding: 10px 10px 5px 10px;
+    padding: 10px 20px 5px 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     cursor: pointer;
     transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
 }
 
 .menuOption:hover {
-    box-shadow: inset 300px 0 0 0 #9eade9;
+    box-shadow: inset 350px 0 0 0 #9eade9;
     color: black;
 }
 
@@ -132,4 +137,29 @@ body {
     padding-top: 10px;
     font-size: 30px;
     font-style: italic;
+}
+
+.animate-charcter {
+    text-transform: uppercase;
+    background-image: linear-gradient(-225deg,
+            #231557 0%,
+            #44107a 29%,
+            #A8EEE3 67%,
+            #9eade9 100%);
+    background-size: auto auto;
+    background-clip: border-box;
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textclip 2s linear infinite;
+    display: inline-block;
+    font-size: 190px;
+}
+
+@keyframes textclip {
+    to {
+        background-position: 200% center;
+    }
 }
