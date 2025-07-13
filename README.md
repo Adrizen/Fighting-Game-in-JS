@@ -5,6 +5,7 @@
 Currently with 2 game modes: Player vs AI and Player vs Player.
 
 ▶️ Play at: https://fighting-game-in-js.netlify.app/html/index.html
+(for now, you need to refresh the page (F5) after the game ends to start a new one)
 
 🎥 Based in this tutorial: [JavaScript Fighting Game Tutorial with HTML Canvas](https://www.youtube.com/watch?v=vyqbNFMDRGQ) (Credits: Chris Courses)
 
